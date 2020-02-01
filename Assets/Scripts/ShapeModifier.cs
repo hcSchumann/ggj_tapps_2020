@@ -11,6 +11,8 @@ public class ShapeModifier : MonoBehaviour
     [SerializeField] private GameObject DEBUG_collisionPointPrefab;
     [SerializeField] private bool DEBUG = false;
 
+    [SerializeField] private float magnitudeScale = 1f;
+
     private Vector3[] vertices;
     private int vertexCount;
 
@@ -37,21 +39,24 @@ public class ShapeModifier : MonoBehaviour
         }
 
         foreach (var vertexIndex in meshVerticesIndex)
-        {
-            var v = vertices[vertexIndex];
-            var vertexNormal = v.normalized;
-            vertices[vertexIndex] -= vertexNormal * 0.005f;
-            
+        {   
             if(DEBUG)
             {
                 var debugPoint = Instantiate(DEBUG_collisionPointPrefab, transform.position+vertices[vertexIndex], Quaternion.identity);
                 StartCoroutine(DestroyDebugPoint(debugPoint));
+            } else
+            {
+                var v = vertices[vertexIndex];
+                var vertexNormal = v.normalized;
+                vertices[vertexIndex] -= vertexNormal * deformationVector.magnitude / magnitudeScale;
             }
         }
 
         meshFilter.mesh.vertices = vertices;
         meshFilter.mesh.MarkModified();
         meshFilter.mesh.UploadMeshData(false);
+        //GetComponent<MeshCollider>().sharedMesh = null;
+        GetComponent<MeshCollider>().sharedMesh = meshFilter.mesh;
     }
 
     private IEnumerator DestroyDebugPoint(GameObject debugPoint)
@@ -61,13 +66,24 @@ public class ShapeModifier : MonoBehaviour
         Destroy(debugPoint);
     }
 
+    int meme = 0;
+
     private void AddNearVertices(Vector3 point, List<int> nearVertices)
     {
+        
         for (int i = 0; i < vertexCount; i++)
         {
-            var vertexWorldPos = transform.position + vertices[i];
+            meme++;
+            var vertexWorldPos = transform.TransformPoint(vertices[i]);
             var distance = Vector3.Magnitude(point - vertexWorldPos);
 
+            if (meme < 10)
+            {
+                Debug.Log("D: " + distance);
+                Debug.Log("P: " + transform.position);
+                Debug.Log("V: " + vertices[i]);
+                Debug.Log("T: " + transform.TransformPoint(vertices[i]));
+            }
             if (distance < maxDistanceFromCollisionPoint)
             {
                 nearVertices.Add(i);

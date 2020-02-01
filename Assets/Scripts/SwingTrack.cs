@@ -14,6 +14,8 @@ public class SwingTrack : MonoBehaviour
 
     float lastForce = 0f;
 
+    [SerializeField] float debugForce = 100f;
+
     public TMP_Text textMesh;
 
     public Rigidbody hammer;
@@ -25,7 +27,7 @@ public class SwingTrack : MonoBehaviour
         Input.gyro.enabled = true;
         Handheld.Vibrate();
         Debug.Log(hammer.maxAngularVelocity);
-        hammer.maxAngularVelocity = 100f;
+        hammer.maxAngularVelocity = debugForce * 1000000f;
     }
 
     float speed = 10f;
@@ -45,16 +47,21 @@ public class SwingTrack : MonoBehaviour
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 
+    public void ReloadGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     void FixedUpdate()
     {
         if(Input.touchCount >= 3)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            ReloadGame();
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isMoving = true;
-            totalForce = 10f;
+            totalForce = debugForce;
         }
         var currentForce = Input.gyro.userAcceleration.x * 1f;
 
@@ -64,7 +71,8 @@ public class SwingTrack : MonoBehaviour
             {
                 isMoving = false;
                 lastForce = totalForce;
-                hammer.AddRelativeTorque(0f, 0f, totalForce * 100f);
+                hammer.angularVelocity = Vector3.zero;
+                hammer.AddTorque(0f, 0f, totalForce * 100f);
 
                 Debug.Log("Last Force: " + totalForce);
                 Vibration.CreateOneShot(200, Mathf.Min((int)totalForce * 10, 255));

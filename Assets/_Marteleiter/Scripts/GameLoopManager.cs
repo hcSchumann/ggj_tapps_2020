@@ -48,6 +48,7 @@ public sealed class GameLoopManager : MonoBehaviour
     private void Start()
     {
         StartGame();
+        Camera.main.transform.SetParent(rotationPlane.transform);
     }
     private void OnLoadScene()
     {

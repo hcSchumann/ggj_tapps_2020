@@ -6,10 +6,15 @@ public class NetworkHome : MonoBehaviour
 {
     NetworkManager networkManager;
 
-    [SerializeField] TMP_InputField ipField;
+    [SerializeField] private TMP_InputField ipField;
+
+    [SerializeField] private AudioClip buttonSound;
+
+    private AudioSource audioSource;
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         networkManager = GetComponent<NetworkManager>();
         networkManager.networkAddress = GetLocalIPAddress();
         ipField.text = networkManager.networkAddress;
@@ -17,12 +22,14 @@ public class NetworkHome : MonoBehaviour
 
     public void Host()
     {
+        audioSource.PlayOneShot(buttonSound);
         networkManager.StartHost();
         Debug.Log("Hosting at: " + networkManager.networkAddress);
     }
 
     public void Join()
     {
+        audioSource.PlayOneShot(buttonSound);
         networkManager.networkAddress = ipField.text;
         networkManager.StartClient();
     }

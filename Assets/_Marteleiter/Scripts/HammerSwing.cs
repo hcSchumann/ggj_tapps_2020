@@ -13,6 +13,10 @@ public class HammerSwing : MonoBehaviour
 
     [SerializeField] private float swingMaxAngle;
 
+    [SerializeField] private AudioClip impactSound;
+
+    private AudioSource audioSource;
+
     private MeshCollider hammerMeshCollider;
 
     private MeshRenderer hammerMeshRenderer;
@@ -22,6 +26,8 @@ public class HammerSwing : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         hammerMeshCollider = GetComponentInChildren<MeshCollider>();
 
         hammerMeshRenderer = GetComponentInChildren<MeshRenderer>();
@@ -38,6 +44,8 @@ public class HammerSwing : MonoBehaviour
         swingTween.Kill();
         hammerMeshCollider.enabled = false;
 
+        audioSource.PlayOneShot(impactSound);
+
         DestroyHammer();
     }
 
@@ -47,6 +55,6 @@ public class HammerSwing : MonoBehaviour
         {
             material.DOFade(0, timeToDestroy).SetEase(Ease.OutQuad);
         }
-        GameObject.Destroy(gameObject, timeToDestroy);
+        Destroy(gameObject, timeToDestroy);
     }
 }

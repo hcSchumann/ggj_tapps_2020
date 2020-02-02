@@ -24,6 +24,11 @@ public class HammerTool : NetworkBehaviour
     void FixedUpdate()
     {
         GetHammerMovement();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rotationPlane.SpawnHammer(Random.Range(1f, 20f));
+        }
     }
 
     void GetHammerMovement()

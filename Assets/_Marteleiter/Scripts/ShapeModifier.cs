@@ -30,11 +30,11 @@ public class ShapeModifier : MonoBehaviour
             return;
         }
 
+        hammerSwing.StopSwing();
+
         var contactPoints = pCollision.contacts;
 
         ModifyMeshPoints(contactPoints, hammerSwing.swingForce);
-
-        hammerSwing.StopSwing();
     }
 
     public void ModifyMeshPoints(ContactPoint[] contactPoints, float impactForce)

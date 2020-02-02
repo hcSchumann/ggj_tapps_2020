@@ -49,7 +49,11 @@ public static class Vibration
 			vibrator.Call("vibrate", vibrationEffect);
 		}
 		else
+		{
+#if UNITY_ANDROID
 			Handheld.Vibrate();
+#endif
+		}
 	}
 
 	public static bool HasVibrator()

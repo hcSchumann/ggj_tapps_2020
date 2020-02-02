@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ public class ShapeModifier : MonoBehaviour
     [SerializeField] private float magnitudeScale = 1f;
 
     private Vector3[] vertices;
-    private int vertexCount;
+    [SerializeField] private int vertexCount;
 
     private void Start()
     {
@@ -24,13 +23,21 @@ public class ShapeModifier : MonoBehaviour
 
     private void OnCollisionEnter(Collision pCollision)
     {
-        var deformationVector = pCollision.relativeVelocity;
+        var hammerSwing = pCollision.rigidbody.GetComponentInParent<HammerSwing>();
+
+        if (hammerSwing == null)
+        {
+            return;
+        }
+
         var contactPoints = pCollision.contacts;
 
-        ModifyMeshPoints(contactPoints, deformationVector);
+        ModifyMeshPoints(contactPoints, hammerSwing.swingForce);
+
+        hammerSwing.StopSwing();
     }
 
-    public void ModifyMeshPoints(ContactPoint[] contactPoints, Vector3 deformationVector)
+    public void ModifyMeshPoints(ContactPoint[] contactPoints, float impactForce)
     {
         List<int> meshVerticesIndex = new List<int>();
         foreach (var contactPoint in contactPoints)
@@ -48,14 +55,13 @@ public class ShapeModifier : MonoBehaviour
             {
                 var v = vertices[vertexIndex];
                 var vertexNormal = v.normalized;
-                vertices[vertexIndex] -= vertexNormal * deformationVector.magnitude / magnitudeScale;
+                vertices[vertexIndex] -= vertexNormal * impactForce / magnitudeScale;
             }
         }
 
         meshFilter.mesh.vertices = vertices;
         meshFilter.mesh.MarkModified();
         meshFilter.mesh.UploadMeshData(false);
-        //GetComponent<MeshCollider>().sharedMesh = null;
         GetComponent<MeshCollider>().sharedMesh = meshFilter.mesh;
     }
 
@@ -66,24 +72,12 @@ public class ShapeModifier : MonoBehaviour
         Destroy(debugPoint);
     }
 
-    int meme = 0;
-
     private void AddNearVertices(Vector3 point, List<int> nearVertices)
     {
-        
         for (int i = 0; i < vertexCount; i++)
         {
-            meme++;
             var vertexWorldPos = transform.TransformPoint(vertices[i]);
             var distance = Vector3.Magnitude(point - vertexWorldPos);
-
-            if (meme < 10)
-            {
-                Debug.Log("D: " + distance);
-                Debug.Log("P: " + transform.position);
-                Debug.Log("V: " + vertices[i]);
-                Debug.Log("T: " + transform.TransformPoint(vertices[i]));
-            }
             if (distance < maxDistanceFromCollisionPoint)
             {
                 nearVertices.Add(i);

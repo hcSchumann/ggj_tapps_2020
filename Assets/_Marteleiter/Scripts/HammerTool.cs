@@ -11,10 +11,13 @@ public class HammerTool : NetworkBehaviour
 
     private readonly int vibrationDuration = 200;
 
+    private RotationPlane rotationPlane;
+
     // Start is called before the first frame update
     void Start()
     {
         Input.gyro.enabled = true;
+        rotationPlane = FindObjectOfType<RotationPlane>();
     }
 
     // Update is called once per frame
@@ -45,6 +48,6 @@ public class HammerTool : NetworkBehaviour
     [Command]
     void CmdHammerSwing(float swingForce)
     {
-        Debug.Log("Hammer swing: " + swingForce);
+        rotationPlane.SpawnHammer(swingForce);
     }
 }

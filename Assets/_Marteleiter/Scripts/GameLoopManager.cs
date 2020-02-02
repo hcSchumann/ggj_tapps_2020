@@ -6,11 +6,12 @@ public sealed class GameLoopManager : MonoBehaviour
 {
     [Header("Target Objects")]
     [SerializeField] GameObject targetObjectSlot;
-    [SerializeField] GameObject[] targetObjects;
+    [SerializeField] LevelInfo[] levels;
 
     [Header("Managed Objects")]
     [SerializeField] RotationPlane rotationPlane;
     [SerializeField] LevelValidator levelValidator;
+    [SerializeField] MeshRenderer levelGoalRenderer;
 
     [Header("Timer")]
     [SerializeField] Text timerText;
@@ -78,18 +79,21 @@ public sealed class GameLoopManager : MonoBehaviour
         secondsToFinishTheGame = gameLoopDurationInSeconds;
         timerText.color = defaultTimerColor;
 
-        var randomTargetIndex = Mathf.FloorToInt(Random.value * targetObjects.Length);
-        currentTarget = Instantiate(targetObjects[randomTargetIndex], targetObjectSlot.transform);
-
+        var randomLevelIndex = Mathf.FloorToInt(Random.value * (levels.Length-1));
+        var randomLevel = levels[randomLevelIndex];
+        currentTarget = Instantiate(randomLevel.InicialObject, targetObjectSlot.transform);
+        levelValidator.SetTargetTexture(randomLevel.targetObjectSprite.texture);
+        levelGoalRenderer.material.mainTexture = (randomLevel.targetObjectSprite.texture);
         rotationPlane.SetInputStatus(IsGameActive);
 
         StartCoroutine(CountDownGameEnd());
     }
     private void EndGame()
     {
-        levelValidator.GetLevelRating();
-
         rotationPlane.SetInputStatus(IsGameActive);
+
+        var levelRating = levelValidator.GetLevelRating();
+
 
         StartCoroutine(ResetGame());
     }

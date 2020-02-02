@@ -42,6 +42,11 @@ public class LevelValidator : MonoBehaviour
         return levelRating;
     }
 
+    public void SetTargetTexture(Texture2D pTargetTexture)
+    {
+        targetTexture = pTargetTexture;
+    }
+
     private int CalculateLevelRating()
     {
         var target = targetTexture.GetPixels();

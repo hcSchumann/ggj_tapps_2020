@@ -8,8 +8,9 @@ public class RotationPlane : NetworkBehaviour
     [SerializeField] private float rotationSpeed = 10f;
 
     [SerializeField] private GameObject hammerPrefab;
-
     [SerializeField] private Transform hammerPosition;
+
+    [SerializeField] private GameObject goalIndicator;
 
     private bool ShouldAcceptInputs = false;
 
@@ -21,6 +22,7 @@ public class RotationPlane : NetworkBehaviour
         }
 
         transform.Rotate(new Vector3(0, 0, rotationDirection), rotationSpeed);
+        goalIndicator.transform.Rotate(new Vector3(0, 0, -rotationDirection), rotationSpeed);
     }
 
     public void SetInputStatus(bool inputStatus)

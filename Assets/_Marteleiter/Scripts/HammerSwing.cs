@@ -15,9 +15,11 @@ public class HammerSwing : MonoBehaviour
 
     [SerializeField] private AudioClip impactSound;
 
+    public const float maxForce = 15f;
+
     private AudioSource audioSource;
 
-    private MeshCollider hammerMeshCollider;
+    private CapsuleCollider hammerCollider;
 
     private MeshRenderer hammerMeshRenderer;
 
@@ -26,9 +28,12 @@ public class HammerSwing : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        swingForce = Mathf.Min(maxForce, swingForce);
+
+        Debug.Log("Spawn Hammer with: " + swingForce);
         audioSource = GetComponent<AudioSource>();
 
-        hammerMeshCollider = GetComponentInChildren<MeshCollider>();
+        hammerCollider = GetComponentInChildren<CapsuleCollider>();
 
         hammerMeshRenderer = GetComponentInChildren<MeshRenderer>();
 
@@ -42,7 +47,7 @@ public class HammerSwing : MonoBehaviour
     public void StopSwing()
     {
         swingTween.Kill();
-        hammerMeshCollider.enabled = false;
+        hammerCollider.enabled = false;
 
         audioSource.PlayOneShot(impactSound);
 

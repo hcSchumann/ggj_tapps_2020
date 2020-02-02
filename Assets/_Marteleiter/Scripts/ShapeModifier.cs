@@ -55,7 +55,7 @@ public class ShapeModifier : MonoBehaviour
             {
                 var v = vertices[vertexIndex];
                 var vertexNormal = v.normalized;
-                vertices[vertexIndex] -= vertexNormal * impactForce / magnitudeScale;
+                vertices[vertexIndex] -= vertexNormal * impactForce * magnitudeScale;
             }
         }
 

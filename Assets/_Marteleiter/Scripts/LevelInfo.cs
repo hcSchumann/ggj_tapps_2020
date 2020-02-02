@@ -7,9 +7,9 @@ public class LevelInfo : ScriptableObject
     public GameObject InicialObject;
     public Sprite targetObjectSprite;
 
-	
-	[MenuItem("Level/Create new level")]
-	public static void CreateLevel()
+#if UNITY_EDITOR
+    [MenuItem("Level/Create new level")]
+    public static void CreateLevel()
 	{
 		var asset = ScriptableObject.CreateInstance<LevelInfo>();
 
@@ -24,5 +24,5 @@ public class LevelInfo : ScriptableObject
 		EditorUtility.FocusProjectWindow();
 		Selection.activeObject = asset;
 	}
-
+#endif
 }

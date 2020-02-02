@@ -18,12 +18,12 @@ public sealed class GameLoopManager : MonoBehaviour
     [SerializeField] private Color defaultTimerColor;
     [SerializeField] private Color hurryTimerColor;
 
-    public int secondsToFinishTheGame = 20;
+    [SerializeField] private int gameLoopDurationInSeconds = 20;
+    private int secondsToFinishTheGame = 20;
     public bool IsGameActive { get { return secondsToFinishTheGame > 0;  } }
 
     private static GameLoopManager instance = null;
     private static readonly object padlock = new object();
-    private const int gameLoopDurationInSeconds = 20;
     private GameObject currentTarget;
 
     public GameLoopManager()

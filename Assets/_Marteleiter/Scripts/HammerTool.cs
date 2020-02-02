@@ -13,6 +13,10 @@ public class HammerTool : NetworkBehaviour
 
     private RotationPlane rotationPlane;
 
+    private readonly float cooldownTime = 0.5f;
+
+    private float currentTime = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,19 +24,30 @@ public class HammerTool : NetworkBehaviour
         rotationPlane = FindObjectOfType<RotationPlane>();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rotationPlane.SpawnHammer(15f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            rotationPlane.SpawnHammer(5f);
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
+        currentTime += Time.fixedTime;
         GetHammerMovement();
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rotationPlane.SpawnHammer(Random.Range(1f, 20f));
-        }
     }
 
     void GetHammerMovement()
     {
+        
+
         var currentForce = Input.gyro.userAcceleration.x * forceMultiplier;
 
         var isMoving = currentForce > forceThreshold;
@@ -42,6 +57,10 @@ public class HammerTool : NetworkBehaviour
             totalForce += currentForce;
         } else if (!isMoving && totalForce > 0)
         {
+            if (cooldownTime > currentTime)
+                return;
+
+            currentTime = 0f;
             CmdHammerSwing(totalForce);
 
             // TODO: Force exponential not linear

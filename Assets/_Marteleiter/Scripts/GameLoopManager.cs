@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public sealed class GameLoopManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public sealed class GameLoopManager : MonoBehaviour
 
     [Header("Timer")]
     [SerializeField] Text timerText;
+    [SerializeField] TMP_Text scoreText;
+    [SerializeField] Image scoreImage;
     [SerializeField] private Color defaultTimerColor;
     [SerializeField] private Color hurryTimerColor;
 
@@ -53,13 +56,6 @@ public sealed class GameLoopManager : MonoBehaviour
         Camera.main.transform.SetParent(rotationPlane.transform);
         StartGame();
     }
-    private void OnLoadScene()
-    {
-        if (secondsToFinishTheGame <= 0)
-        {
-            EndGame();
-        }
-    }
 
     private IEnumerator CountDownGameEnd()
     {
@@ -74,6 +70,8 @@ public sealed class GameLoopManager : MonoBehaviour
                 timerText.color = hurryTimerColor;
             }
         }
+        rotationPlane.SetInputStatus(IsGameActive);
+        yield return new WaitForSeconds(1);
         EndGame();
     }
     public void StartGame()
@@ -83,6 +81,9 @@ public sealed class GameLoopManager : MonoBehaviour
             return;
         }
 
+        scoreText.enabled = false;
+        scoreImage.enabled = false;
+        timerText.enabled = true;
         gameStarted = true;
         secondsToFinishTheGame = gameLoopDurationInSeconds;
         timerText.color = defaultTimerColor;
@@ -98,9 +99,15 @@ public sealed class GameLoopManager : MonoBehaviour
     }
     private void EndGame()
     {
-        rotationPlane.SetInputStatus(IsGameActive);
-
         var levelRating = levelValidator.GetLevelRating();
+
+        scoreText.enabled = true;
+        scoreImage.enabled = true;
+        Debug.Log(levelRating);
+        scoreText.text = "Final Score:\n" + (levelRating + Random.Range(-10, 10)) + "%";
+        //scoreText.text = "WoW";
+
+        timerText.enabled = false;
 
         gameStarted = false;
 

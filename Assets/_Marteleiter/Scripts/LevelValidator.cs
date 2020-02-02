@@ -9,6 +9,8 @@ public class LevelValidator : MonoBehaviour
 
     private RenderTexture renderTexture;
 
+    public int levelRating;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +35,7 @@ public class LevelValidator : MonoBehaviour
 
         GetComponent<Camera>().Render();
 
-        int levelRating = CalculateLevelRating();
+        levelRating = CalculateLevelRating();
 
         shapeMaterial.color = Color.white;
 
@@ -73,6 +75,8 @@ public class LevelValidator : MonoBehaviour
 
         texture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
         texture.Apply();
+
+        //File.WriteAllBytes(Application.dataPath + "/Test.png", texture.EncodeToPNG());
 
         return texture;
     }

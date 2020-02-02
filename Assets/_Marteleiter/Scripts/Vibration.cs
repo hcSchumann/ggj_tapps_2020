@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// From: https://gist.github.com/playfulbacon/4ff08fcdf7ab0c023118874f5339bf7a
+
+using UnityEngine;
 using System.Collections;
 
 public static class Vibration

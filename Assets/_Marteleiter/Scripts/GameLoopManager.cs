@@ -26,6 +26,8 @@ public sealed class GameLoopManager : MonoBehaviour
     private static readonly object padlock = new object();
     private GameObject currentTarget;
 
+    private bool gameStarted = false;
+
     public GameLoopManager()
     {
     }
@@ -48,8 +50,8 @@ public sealed class GameLoopManager : MonoBehaviour
     
     private void Start()
     {
-        StartGame();
         Camera.main.transform.SetParent(rotationPlane.transform);
+        StartGame();
     }
     private void OnLoadScene()
     {
@@ -74,8 +76,14 @@ public sealed class GameLoopManager : MonoBehaviour
         }
         EndGame();
     }
-    private void StartGame()
+    public void StartGame()
     {
+        if (gameStarted)
+        {
+            return;
+        }
+
+        gameStarted = true;
         secondsToFinishTheGame = gameLoopDurationInSeconds;
         timerText.color = defaultTimerColor;
 
@@ -94,6 +102,7 @@ public sealed class GameLoopManager : MonoBehaviour
 
         var levelRating = levelValidator.GetLevelRating();
 
+        gameStarted = false;
 
         StartCoroutine(ResetGame());
     }

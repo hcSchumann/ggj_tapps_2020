@@ -10,6 +10,7 @@ public sealed class GameLoopManager : MonoBehaviour
 
     [Header("Managed Objects")]
     [SerializeField] RotationPlane rotationPlane;
+    [SerializeField] LevelValidator levelValidator;
 
     [Header("Timer")]
     [SerializeField] Text timerText;
@@ -85,7 +86,7 @@ public sealed class GameLoopManager : MonoBehaviour
     }
     private void EndGame()
     {
-        //validate shape
+        levelValidator.GetLevelRating();
 
         rotationPlane.SetInputStatus(IsGameActive);
 

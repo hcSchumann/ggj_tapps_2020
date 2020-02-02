@@ -9,8 +9,6 @@ public class LevelValidator : MonoBehaviour
 
     private RenderTexture renderTexture;
 
-    private bool showResut = false;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -21,26 +19,30 @@ public class LevelValidator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            var validatorCamera = GetComponent<Camera>();
-            validatorCamera.enabled = true;
-            showResut = true;
-            shapeMaterial.color = Color.black;
-            GetComponent<Camera>().Render();
-            shapeMaterial.color = Color.white;
-            validatorCamera.enabled = false;
-        }
-    }
-
-    void OnPostRender()
-    {
-        if (showResut)
-        {
             Debug.Log(GetLevelRating());
-            showResut = false;
         }
     }
 
-    private int GetLevelRating()
+    public int GetLevelRating()
+    {
+        var validatorCamera = GetComponent<Camera>();
+
+        validatorCamera.enabled = true;
+
+        shapeMaterial.color = Color.black;
+
+        GetComponent<Camera>().Render();
+
+        int levelRating = CalculateLevelRating();
+
+        shapeMaterial.color = Color.white;
+
+        validatorCamera.enabled = false;
+
+        return levelRating;
+    }
+
+    private int CalculateLevelRating()
     {
         var target = targetTexture.GetPixels();
 

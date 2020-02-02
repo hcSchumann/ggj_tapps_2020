@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1681077832888545315}
   - component: {fileID: 4060154609445238543}
   - component: {fileID: 8482314846918280039}
-  - component: {fileID: 1101001763952297845}
   - component: {fileID: 1101001763952297846}
+  - component: {fileID: 483721889208497349}
   m_Layer: 0
   m_Name: HammerMesh
   m_TagString: Untagged
@@ -82,20 +82,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &1101001763952297845
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1101001763952297847}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2534964839176971238, guid: 3c76ddc17f1ca44c4b519e090bfbc3c0, type: 3}
 --- !u!54 &1101001763952297846
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -111,7 +97,21 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
+--- !u!136 &483721889208497349
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101001763952297847}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.1
+  m_Height: 0.98
+  m_Direction: 2
+  m_Center: {x: 1.7, y: 0, z: -0.15}
 --- !u!1 &3762930797585162790
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   rotationBaseSpeed: 2
   rotationMinDuration: 0.5
   timeToDestroy: 1
-  swingMaxAngle: 180
+  swingMaxAngle: 90
   impactSound: {fileID: 8300000, guid: bfd8ae477cf814c69809ef45d1b3ab81, type: 3}
 --- !u!82 &727193178287462282
 AudioSource:

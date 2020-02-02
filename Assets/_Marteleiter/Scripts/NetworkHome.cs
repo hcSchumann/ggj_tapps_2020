@@ -2,36 +2,35 @@
 using UnityEngine.Networking;
 using TMPro;
 
-public class NetworkHome : MonoBehaviour
+public class NetworkHome : NetworkManager
 {
-    NetworkManager networkManager;
-
     [SerializeField] private TMP_InputField ipField;
 
     [SerializeField] private AudioClip buttonSound;
 
     private AudioSource audioSource;
 
+    private bool isServer = false;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        networkManager = GetComponent<NetworkManager>();
-        networkManager.networkAddress = GetLocalIPAddress();
-        ipField.text = networkManager.networkAddress;
+        networkAddress = GetLocalIPAddress();
+        ipField.text = networkAddress;
     }
 
     public void Host()
     {
         audioSource.PlayOneShot(buttonSound);
-        networkManager.StartHost();
-        Debug.Log("Hosting at: " + networkManager.networkAddress);
+        StartHost();
+        Debug.Log("Hosting at: " + networkAddress);
     }
 
     public void Join()
     {
         audioSource.PlayOneShot(buttonSound);
-        networkManager.networkAddress = ipField.text;
-        networkManager.StartClient();
+        networkAddress = ipField.text;
+        StartClient();
     }
 
     public static string GetLocalIPAddress()
